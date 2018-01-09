@@ -47,9 +47,15 @@ class ContactManager{
 	constructor(){
 		this._contacts = [];
 	}
+
+	static compareContacts(c1,c2){
+		if(c1.name < c2.name) return -1;
+		if(c1.name > c2.name) return 1;
+		return 0;
+	}
 	
-	add(x){
-		this._contacts.push(x);
+	add(contact){
+		this._contacts.push(contact);
 	}
 
 	remove(contact){
@@ -74,6 +80,10 @@ class ContactManager{
 		});
 		output+="</ul>";
 		return output;
+	}
+
+	sort(){
+		this._contacts.sort(ContactManager.compareContacts);
 	}
 }
 
