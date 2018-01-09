@@ -1,4 +1,4 @@
-var fname, surname, phone;
+var fname, surname, email;
 
 window.onload = function(){
 	//setup the onclick functionality for the submit button
@@ -7,15 +7,15 @@ window.onload = function(){
 
 	fname = document.getElementById('fname');
 	surname = document.getElementById('surname');
-	phone = document.getElementById('phone');
+	email = document.getElementById('email');
 	contactList = document.getElementById('contactList');
 }
 
 class Contact{
-	constructor(name, surname, phone){
+	constructor(name, surname, email){
 		this._name = name;
 		this._surname = surname;
-		this._phone = phone;
+		this._email = email;
 	}
 	
 	get name(){
@@ -34,12 +34,12 @@ class Contact{
 		this._surname = x;
 	}
 	
-	get phone(){
-		return this._phone;
+	get email(){
+		return this._email;
 	}
 	
-	set phone(x){
-		this._phone = x;
+	set email(x){
+		this._email = x;
 	}
 }
 
@@ -50,6 +50,21 @@ class ContactManager{
 	
 	add(x){
 		this._contacts.push(x);
+	}
+
+	remove(contact){
+		//match the contact from the contat list based on email
+		for(let i=0; i<this._contacts.length;i++){
+			if(this._contacts[i].email === contact.email){
+				this._contacts.splice(i,1);
+				break;
+			}
+		}
+
+	}
+
+	printCon(){
+		this._contacts.forEach(contact=>console.log(contact.name));
 	}
 	
 	list(){
@@ -66,8 +81,8 @@ let db = new ContactManager();
 
 function processMyForm(e){
 	e.preventDefault();
-	const contact = new Contact(fname.value, surname.value, phone.value);
+	const contact = new Contact(fname.value, surname.value, email.value);
 	db.add(contact);
 	contactList.innerHTML = db.list();
-	fname.value = surname.value = phone.value = "";
+	fname.value = surname.value = email.value = "";
 }
