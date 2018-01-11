@@ -1,14 +1,24 @@
-var fname, surname, email;
+window.onload = init;
 
-window.onload = function(){
-	//setup the onclick functionality for the submit button
-	const contactForm = document.getElementById("contactForm");
-	contactForm.addEventListener('submit',processMyForm);
+let cm;
 
-	fname = document.getElementById('fname');
-	surname = document.getElementById('surname');
-	email = document.getElementById('email');
-	contactList = document.getElementById('contactList');
+function init(){
+	cm = new ContactManager;
+	cm.addTestData();
+	cm.printCon();
+	cm.displayAsTable('contactList');
+}
+
+function formSubmitted(){
+	let fname = document.querySelector('#fname');
+	let surname = document.getElementById('surname');
+	let email = document.getElementById('email');
+	let contact = new Contact(fname.value,surname.value,email.value);
+	cm.add(contact);
+
+	fname.value = surname.value = email.value = "";
+	cm.displayAsTable('contactList');
+	return false;
 }
 
 class Contact{
@@ -73,7 +83,7 @@ class ContactManager{
 		this._contacts.forEach(contact=>console.log(contact.name));
 	}
 	
-	list(){
+	displayAsList(){
 		let output = "<ul>";
 		this._contacts.forEach(contact=>{
 			output+=`<li>${contact.name} ${contact.surname}</li>`; 
@@ -82,8 +92,53 @@ class ContactManager{
 		return output;
 	}
 
+	displayAsTable(containerId){
+		let container = document.querySelector(`#${containerId}`);
+		container.innerHTML = "";
+		if(this._contacts.length == 0){
+			 container.innerHTML="<p>There are no contacts to display.</p>";
+			 return;
+		}
+
+		let table = document.createElement("table");
+		this._contacts.forEach(contact=>{
+			let row = table.insertRow();
+			row.innerHTML = `<td>${contact.name}</td><td>${contact.email}</td>`
+		});
+		container.appendChild(table);
+	}
+
 	sort(){
 		this._contacts.sort(ContactManager.compareContacts);
+	}
+
+	save(){
+		localStorage.contacts = JSON.stringify(this._contacts);
+	}
+
+	load(){
+		if(localStorage.contacts !== undefined){
+			this._contacts = JSON.parse(localStorage.contacts);
+		}
+	}
+
+	empty(){
+		this._contacts = [];
+	}
+
+	addTestData() {
+		let c1 = new Contact("Jimi", "Hendrix", "jimi@rip.com");
+  		let c2 = new Contact("Robert", "Fripp", "robert.fripp@kingcrimson.com");
+  		let c3 = new Contact("Angus", "Young", "angus@acdc.com");
+  		let c4 = new Contact("Arnold", "Schwarzenneger", "T2@terminator.com");
+		
+		this.add(c1);
+		this.add(c2);
+		this.add(c3);
+		this.add(c4);
+		
+		// Let's sort the list of contacts by Name
+		this.sort();
 	}
 }
 

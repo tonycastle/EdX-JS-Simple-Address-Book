@@ -6,11 +6,11 @@
     <body>
         <h1>Contact Book</h1>
         <h3>Add New Contact</h3>
-        <form id="contactForm" action="http://www.google.co.uk">
+        <form id="contactForm"  onsubmit="return formSubmitted();" action="http://www.google.co.uk">
             <label> Name: <input type="text" id="fname" /></label>
             <label> Surname: <input type="text" id="surname" /></label>
-            <label> Phone: <input type="text" id="phone" /></label>
-            <input type="submit" id="submit" value="Add to Contacts" />
+            <label> email: <input type="text" id="email" /></label>
+            <input type="submit" id="submit" value="Add New Contact" />
         </form>
         <h3>Contacts</h3>
         <div id="contactList">
